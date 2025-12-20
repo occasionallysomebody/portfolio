@@ -1,0 +1,1 @@
+# tells Netlify's "factory" to run scanner script {@code get-images.js} before showing the site to the world.
