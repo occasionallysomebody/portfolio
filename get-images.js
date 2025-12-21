@@ -23,24 +23,23 @@ try {
 
     folders.forEach(album => {
         const albumPath = path.join(galleryDir, album);
-        let photos = fs.readdirSync(albumPath)
-            .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file));
+        const photos = fs.readdirSync(albumPath)
+            .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
+            .sort((a, b) => {
+                // Split by hyphen to get [0002, 0001, name]
+                const aParts = a.split('-');
+                const bParts = b.split('-');
 
-        // LOG FOR DEBUGGING: This will show up in your Vercel Build Logs
-        console.log(`Album [${album}] found files:`, photos);
+                const aPrimary = parseInt(aParts[0], 10) || 0;
+                const aSecondary = parseInt(aParts[1], 10) || 0;
 
-        photos.sort((a, b) => {
-            // 1. Extract just the numbers from the filename (e.g., "02_9" becomes "029")
-            const matchA = a.match(/\d+/g);
-            const matchB = b.match(/\d+/g);
-            
-            // 2. Convert to numbers (default to 0 if no number found)
-            const numA = matchA ? parseInt(matchA.join(''), 10) : 0;
-            const numB = matchB ? parseInt(matchB.join(''), 10) : 0;
-            
-            // 3. Subtract for Reverse order (B - A)
-            return numB - numA;
-        });
+                const bPrimary = parseInt(bParts[0], 10) || 0;
+                const bSecondary = parseInt(bParts[1], 10) || 0;
+
+                // Sort by Primary first, then Secondary
+                if (aPrimary !== bPrimary) return bPrimary - aPrimary;
+                return bSecondary - aSecondary; // Reverse order (Newest/Highest first)
+            });
 
         if (photos.length > 0) albums[album] = photos;
     });
