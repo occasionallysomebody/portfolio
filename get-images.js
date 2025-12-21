@@ -9,41 +9,31 @@
 const fs = require('fs');
 const path = require('path');
 
-// 1. Define where your images are located
-const galleryDir = path.join(__dirname, 'dist/assets/gallery');
-const outputFile = path.join(__dirname, 'images.json');
+// Use process.cwd() to ensure we are in the root of the Vercel build environment
+const rootDir = process.cwd();
+const galleryDir = path.join(rootDir, 'dist/assets/gallery');
+const outputFile = path.join(rootDir, 'images.json');
 
 const albums = {};
 
 try {
-    // 2. Check if the gallery directory exists
-    if (!fs.existsSync(galleryDir)) {
-        console.error(`Error: Directory not found at ${galleryDir}`);
-        process.exit(1);
-    }
-
-    // 3. Get all subdirectories (Albums like 02_Home)
     const folders = fs.readdirSync(galleryDir).filter(file => 
         fs.statSync(path.join(galleryDir, file)).isDirectory()
     );
 
-    // 4. Loop through each folder to find .jpg files
     folders.forEach(album => {
         const albumPath = path.join(galleryDir, album);
         const photos = fs.readdirSync(albumPath)
                          .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
-                         .sort()
-                         .reverse(); // Ensures 02_65 comes before 02_01
-        
-        if (photos.length > 0) {
-            albums[album] = photos;
-        }
+                         .sort().reverse();
+        if (photos.length > 0) albums[album] = photos;
     });
 
-    // 5. Save the final list as images.json
+    // Explicitly log the path for debugging in Vercel logs
+    console.log(`Writing JSON to: ${outputFile}`);
     fs.writeFileSync(outputFile, JSON.stringify(albums, null, 2));
-    console.log(`Success! Found ${Object.keys(albums).length} albums. images.json has been updated.`);
-
+    console.log(`Success! Found ${Object.keys(albums).length} albums.`);
 } catch (err) {
-    console.error("An error occurred during the scan:", err);
+    console.error("Build failed:", err);
+    process.exit(1);
 }
