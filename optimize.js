@@ -1,3 +1,10 @@
+/**
+ * Description: Optimize images so they don't take forever to load
+ * 
+ * @author occasionallysomebody
+ * @version December 20, 2025
+ */
+
 const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');

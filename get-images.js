@@ -48,6 +48,7 @@ try {
     console.log(`Writing JSON to: ${outputFile}`);
     fs.writeFileSync(outputFile, JSON.stringify(albums, null, 2));
     console.log(`Success! Found ${Object.keys(albums).length} albums.`);
+    
 } catch (err) {
     console.error("Build failed:", err);
     process.exit(1);
