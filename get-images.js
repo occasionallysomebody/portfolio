@@ -30,9 +30,16 @@ try {
         console.log(`Album [${album}] found files:`, photos);
 
         photos.sort((a, b) => {
-            // Extracts all numbers and joins them (e.g., "02_9" becomes 29)
-            const getNum = (str) => parseInt((str.match(/\d+/g) || [0]).join('')) || 0;
-            return getNum(b) - getNum(a); // Reverse: Higher numbers first
+            // 1. Extract just the numbers from the filename (e.g., "02_9" becomes "029")
+            const matchA = a.match(/\d+/g);
+            const matchB = b.match(/\d+/g);
+            
+            // 2. Convert to numbers (default to 0 if no number found)
+            const numA = matchA ? parseInt(matchA.join(''), 10) : 0;
+            const numB = matchB ? parseInt(matchB.join(''), 10) : 0;
+            
+            // 3. Subtract for Reverse order (B - A)
+            return numB - numA;
         });
 
         if (photos.length > 0) albums[album] = photos;
