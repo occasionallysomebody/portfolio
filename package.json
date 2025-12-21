@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "tailwindcss": "^4.1.18"
+  },
+  "scripts": {
+    "dev": "node get-images.js && npx @tailwindcss/cli -i ./src/input.css -o ./dist/output.css --watch"
   }
 }

@@ -24,8 +24,15 @@ try {
     folders.forEach(album => {
         const albumPath = path.join(galleryDir, album);
         const photos = fs.readdirSync(albumPath)
-                         .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
-                         .sort().reverse();
+            .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
+            // Sorts numerically 1, 2, 3... then flips to 3, 2, 1
+            .sort((a, b) => {
+                const numA = parseInt(a.match(/\d+/)) || 0;
+                const numB = parseInt(b.match(/\d+/)) || 0;
+                return numB - numA; // Returns higher numbers first (Reverse)
+            })
+            .reverse();
+            
         if (photos.length > 0) albums[album] = photos;
     });
 
