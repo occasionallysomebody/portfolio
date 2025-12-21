@@ -23,16 +23,18 @@ try {
 
     folders.forEach(album => {
         const albumPath = path.join(galleryDir, album);
-        const photos = fs.readdirSync(albumPath)
-            .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
-            // Sorts numerically 1, 2, 3... then flips to 3, 2, 1
-            .sort((a, b) => {
-                const numA = parseInt(a.match(/\d+/)) || 0;
-                const numB = parseInt(b.match(/\d+/)) || 0;
-                return numB - numA; // Returns higher numbers first (Reverse)
-            })
-            .reverse();
-            
+        let photos = fs.readdirSync(albumPath)
+            .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file));
+
+        // LOG FOR DEBUGGING: This will show up in your Vercel Build Logs
+        console.log(`Album [${album}] found files:`, photos);
+
+        photos.sort((a, b) => {
+            // Extracts all numbers and joins them (e.g., "02_9" becomes 29)
+            const getNum = (str) => parseInt((str.match(/\d+/g) || [0]).join('')) || 0;
+            return getNum(b) - getNum(a); // Reverse: Higher numbers first
+        });
+
         if (photos.length > 0) albums[album] = photos;
     });
 
