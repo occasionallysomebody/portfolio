@@ -3,27 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
+    <title>moonshot.709</title>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
     <link rel="stylesheet" href="dist/output.css">
-    <style>
-        /* Global Theme Colors */
-        body {
-            background-color: #1b1b1b; /* Charcoal */
-            color: #EDEBE9;           /* Cream */
-        }
 
+    <style>
+        body { background-color: #1b1b1b; color: #EDEBE9; }
         .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Ensure navigation links inherit the cream color */
         nav a { color: #EDEBE9; }
-
-        /* Custom text selection colors */
-        ::selection {
-            background-color: #EDEBE9;
-            color: #1b1b1b;
-        }
+        ::selection { background-color: #EDEBE9; color: #1b1b1b; }
     </style>
 </head>
 <body class="selection:bg-neutral-700">
@@ -49,75 +39,102 @@
     </main>
 
     <footer class="p-12 border-t border-neutral-800 text-center text-[10px] uppercase tracking-[0.2em] opacity-40">
-        &copy; 2025 All Rights Reserved
+        © 2025 Original Template Developed and Designed by 
+        <a href="https://www.linkedin.com/in/joão-franco-452161195/" target="_blank" class="underline decoration-dotted hover:opacity-100 transition-opacity">João Franco</a>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     
     <script>
+        /** @type {HTMLElement} container - The main div where sections are injected */
         const container = document.getElementById('gallery-container');
-        Fancybox.bind("[data-fancybox]", {});
+        
+        // Initialize lightbox logic
+        Fancybox.bind("[data-fancybox]", { Hash: false, Thumbs: { autoStart: false } });
 
-        // Intersection Observer for Lazy Loading and Fading
+        /**
+         * INTERSECTION OBSERVER
+         * Handles the 'fade-in' effect and lazy loading for images as they scroll into view.
+         */
         const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const img = entry.target;
-                    if (img.complete) {
-                        img.classList.remove('opacity-0');
-                    } else {
-                        img.onload = () => img.classList.remove('opacity-0');
-                    }
+                    img.complete ? img.classList.remove('opacity-0') : img.onload = () => img.classList.remove('opacity-0');
                     observer.unobserve(img);
                 }
             });
         }, { rootMargin: '50px' });
 
+        /**
+         * CORE GALLERY LOGIC
+         * Parses images.json and builds the UI based on filename conventions.
+         * Convention: AlbumID-SequenceID-StackID-Description.ext
+         */
         fetch('images.json')
             .then(res => res.json())
             .then(albums => {
                 container.innerHTML = ''; 
 
                 Object.entries(albums).forEach(([folderName, photos]) => {
-                    // Clean Title Logic (handles both 02_Title and 02-Title)
+                    /** @type {Object} stacks - Temporary storage for grouping carousels */
+                    const stacks = {};
+
+                    // Step 1: Grouping by Stack ID
+                    photos.forEach(file => {
+                        const parts = file.split('-');
+                        const stackID = parts[2] || 'none';
+                        const key = (stackID === 'none') ? `single-${file}` : `${folderName}-${stackID}`;
+                        if (!stacks[key]) stacks[key] = [];
+                        stacks[key].push(file);
+                    });
+
+                    // Step 2: Global Sorting (Sequence ID Descending)
+                    const sortedStackKeys = Object.keys(stacks).sort((a, b) => b.localeCompare(a));
+
+                    // Title Formatting Logic
                     const displayTitle = folderName.includes('_') 
                         ? folderName.split('_').slice(1).join(' ').replace(/-/g, ' ') 
                         : folderName.replace(/-/g, ' ').replace(/^\d+[\s-]/, '');
 
                     let sectionHTML = `
                         <section class="opacity-0 animate-fade-in mb-24">
-                            <h2 class="text-4xl font-black mb-8 uppercase tracking-tighter border-b-4 border-[#EDEBE9] inline-block">
-                                ${displayTitle}
-                            </h2>
+                            <h2 class="text-4xl font-black mb-8 uppercase tracking-tighter border-b-4 border-[#EDEBE9] inline-block">${displayTitle}</h2>
                             <div class="flex flex-wrap -m-1">`;
 
-                    photos.forEach(file => {
-                        const filePath = `dist/assets/gallery/${folderName}/${file}`;
+                    sortedStackKeys.forEach(key => {
+                        // Step 3: Local Sorting (Description A-Z)
+                        const group = stacks[key].sort((a, b) => a.localeCompare(b));
+                        
+                        // Step 4: Cover Selection (Look for -cover tag, fallback to A)
+                        const coverFile = group.find(f => f.toLowerCase().includes('-cover')) || group[0];
+                        const count = group.length;
+                        const coverPath = `dist/assets/gallery/${folderName}/${coverFile}`;
+
                         sectionHTML += `
                             <div class="w-full sm:w-1/2 md:w-1/3 p-1">
-                                <div class="overflow-hidden aspect-square bg-[#262626] group">
-                                    <a href="${filePath}" data-fancybox="gallery-${folderName}">
-                                        <img src="${filePath}" 
-                                             loading="lazy"
-                                             class="lazy-img block h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-80 opacity-0">
+                                <div class="overflow-hidden aspect-square bg-[#262626] group relative">
+                                    <a href="${coverPath}" data-fancybox="${key}" class="block">
+                                        <img src="${coverPath}" loading="lazy" class="lazy-img block h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-80 opacity-0">
+                                        ${count > 1 ? `<div class="absolute top-3 right-3 bg-black/70 text-[#EDEBE9] text-[9px] px-2 py-1 rounded-sm tracking-[0.2em] font-bold">${count} PHOTOS</div>` : ''}
                                     </a>
+                                    ${group.filter(f => f !== coverFile).map(file => `
+                                        <a href="dist/assets/gallery/${folderName}/${file}" data-fancybox="${key}" class="hidden"></a>
+                                    `).join('')}
                                 </div>
                             </div>`;
                     });
 
                     sectionHTML += `</div></section>`;
-                    
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = sectionHTML;
-                    const section = tempDiv.firstElementChild;
-                    
-                    container.appendChild(section);
-                    section.querySelectorAll('.lazy-img').forEach(img => imageObserver.observe(img));
+                    container.appendChild(tempDiv.firstElementChild);
                 });
+
+                // Attach observers to newly created elements
+                document.querySelectorAll('.lazy-img').forEach(img => imageObserver.observe(img));
             })
-            .catch(err => {
-                container.innerHTML = `<div class="text-red-500 text-xs">Error: ${err.message}</div>`;
-            });
+            .catch(err => container.innerHTML = `<div class="text-red-500 text-xs">Runtime Error: ${err.message}</div>`);
     </script>
 </body>
 </html>

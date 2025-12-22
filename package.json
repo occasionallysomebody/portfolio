@@ -1,8 +1,13 @@
 {
   "dependencies": {
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "@tailwindcss/cli": "^4.0.0",
+    "sharp": "^0.33.0"
   },
   "scripts": {
-    "dev": "node get-images.js && npx @tailwindcss/cli -i ./src/input.css -o ./dist/output.css --watch"
+    "optimize": "node optimize.js",
+    "get-images": "node get-images.js",
+    "build": "node optimize.js && node get-images.js && tailwindcss -i ./src/input.css -o ./dist/output.css",
+    "dev": "node get-images.js && tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
   }
 }
