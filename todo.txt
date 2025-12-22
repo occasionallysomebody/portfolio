@@ -1,10 +1,12 @@
-Create blog section
+[x] Create blog section
 Some way to sort through different albums
-Update about_me section (honestly I don't even know if I want one haha)
-Update contact section (the placement and image on the right is distracting)
+[x] Update about_me section (honestly I don't even know if I want one haha)
+[x] Update contact section (the placement and image on the right is distracting)
 Create logo
 Maybe someway to show image tags or the file name
 Should I have a way to add captions? eh. nah. less is more.
-"in medias res" tag line?
+[x] "in medias res" tag line?
 Bookings? I'm not interested in scaling this right now
 Client work
+
+revise fonts (constrast ratio, sizing, etc)

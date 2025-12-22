@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shower Thoughts | moonshot.709</title>
+    <link rel="stylesheet" href="output.css">
+    <style>
+        body { background-color: #1b1b1b; color: #EDEBE9; }
+        nav a { color: #EDEBE9; }
+        .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="selection:bg-neutral-700">
+
+    <nav class="p-8 flex justify-between items-center border-b border-neutral-800">
+        <div class="flex items-center gap-6">
+            <span class="text-[10px] uppercase text-neutral-500 tracking-[0.3em]">Visuals</span>
+            <h1 class="text-lg font-black uppercase tracking-tighter">PORTFOLIO</h1>
+        </div>
+        <div class="space-x-10 text-[10px] uppercase tracking-[0.2em] font-semibold">
+            <a href="../index.html" class="hover:text-white transition-colors duration-300">Gallery</a>
+            <a href="showerThoughts.html" class="hover:text-white transition-colors duration-300">Shower Thoughts</a>
+            <a href="about_me.html" class="hover:text-white transition-colors duration-300">About</a>
+            <a href="contact.html" class="hover:text-white transition-colors duration-300">Contact</a>
+        </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-6 py-24 animate-fade-in">
+        <h2 class="text-5xl font-black mb-16 uppercase tracking-tighter italic">Shower Thoughts.</h2>
+        
+        <div id="shower-thoughts" class="space-y-20">
+            </div>
+
+        <footer class="mt-32 pt-10 border-t border-neutral-800 text-[9px] opacity-30 uppercase tracking-[0.2em]">
+            © 2025 Original Template Developed and Designed by 
+            <a href="https://www.linkedin.com/in/joão-franco-452161195/" target="_blank" class="underline decoration-dotted hover:opacity-100 transition-opacity">João Franco</a>
+        </footer>
+    </main>
+
+    <script>
+        fetch('../posts.json')
+            .then(res => res.json())
+            .then(posts => {
+                const container = document.getElementById('short-posts');
+                posts.forEach(post => {
+                    container.innerHTML += `
+                        <article>
+                            <header class="flex justify-between items-baseline mb-6">
+                                <h3 class="text-xs font-black uppercase tracking-widest">${post.title}</h3>
+                                <span class="text-[9px] opacity-40 tracking-[0.2em]">${post.date}</span>
+                            </header>
+                            <ul class="space-y-4 text-sm leading-relaxed font-light opacity-80">
+                                ${post.content.map(p => `<li class="relative pl-6 before:content-['—'] before:absolute before:left-0 before:opacity-30">${p}</li>`).join('')}
+                            </ul>
+                        </article>`;
+                });
+            });
+    </script>
+</body>
+</html>
