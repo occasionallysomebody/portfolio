@@ -4,5 +4,5 @@ images.json
 dist/output.css
 /.venv/
 /thoughts.json
-/dist/
+dist/
 /.cache/

@@ -6,7 +6,7 @@ const matter = require('gray-matter');
 (async function main(){
   const root = path.join(__dirname, '..');
   const postsDir = path.join(root, 'posts');
-  const outFile = path.join(root, 'thoughts.json');
+  const outFile = path.join(root, 'dist', 'thoughts.json');
 
   await fs.ensureDir(postsDir);
 

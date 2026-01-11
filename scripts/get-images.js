@@ -7,7 +7,7 @@ const path = require('path');
 
 const rootDir = path.join(__dirname, '..');
 const galleryDir = path.join(rootDir, 'dist', 'assets', 'gallery');
-const outputFile = path.join(rootDir, 'images.json');
+const outputFile = path.join(rootDir, 'dist', 'images.json');
 
 const albums = {};
 
