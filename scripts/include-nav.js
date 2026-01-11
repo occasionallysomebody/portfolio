@@ -5,7 +5,7 @@ const path = require('path');
   const root = path.join(__dirname, '..');
   const navPath = path.join(root, 'src', '_includes', 'nav.html');
   
-  // Define source and destination pairs to ensure index.html moves to dist
+  // Maps source templates to their final production destination
   const targets = [
     { src: 'src/index.html', dest: 'dist/index.html' },
     { src: 'dist/about_me.html', dest: 'dist/about_me.html' },
@@ -31,7 +31,7 @@ const path = require('path');
 
     let content = await fs.readFile(srcPath, 'utf8');
 
-    // Replace placeholder <nav id="site-nav"></nav> or existing nav tags
+    // Regex to find the nav placeholder and the optional client-side injector script
     const placeholderRegex = /<nav[^>]*id=["']site-nav["'][^>]*>\s*<\/nav>\s*(?:<script[^>]*nav-inject\.js[^>]*>.*?<\/script>)?/is;
     const firstNavRegex = /<nav[\s\S]*?<\/nav>/i;
 
@@ -43,14 +43,14 @@ const path = require('path');
       console.warn('No <nav> found in', src);
     }
 
-    // Clean up any leftover client-side injection scripts
+    // Clean up any remaining manual injection scripts for a clean production build
     content = content.replace(/<script[^>]*nav-inject\.js[^>]*>\s*<\/script>/ig, '');
 
-    // Ensure dist directory exists before writing the output
+    // Ensure the dist directory exists before writing to avoid build errors
     await fs.ensureDir(path.dirname(destPath)); 
     await fs.writeFile(destPath, content, 'utf8');
-    console.log(`✓ Updated nav: ${src} -> ${dest}`);
+    console.log(`✓ Processed Nav: ${src} -> ${dest}`);
   }
 
-  console.log('\n✓ Nav include complete');
+  console.log('\n✓ Navigation injection complete.');
 })();
