@@ -9,7 +9,7 @@
     "include-SE": "node src/scripts/include-semanticElements.js",
     "optimize": "node src/scripts/optimize.js",
     "manifest": "node src/scripts/get-images.js",
-    "styles": "tailwindcss -i ./src/styling/input.css -o ./dist/assets/output.css --minify",
+    "styles": "tailwindcss -i ./src/styles/input.css -o ./dist/assets/output.css --minify",
     "build": "pip install -r pythonRequirements.txt && npm install @tailwindcss/cli gray-matter marked && npm run heic-convert && npm run posts:build && npm run include-SE && npm run optimize && npm run manifest && npm run styles"
    },
   "dependencies": {
