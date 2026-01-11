@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>moonshot.709</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    <link rel="stylesheet" href="/styling/output.css">
+
+    <style>
+        body { background-color: #1b1b1b; color: #EDEBE9; }
+        .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        nav a { color: #EDEBE9; }
+        ::selection { background-color: #EDEBE9; color: #1b1b1b; }
+    </style>
+</head>
+<body class="selection:bg-neutral-700">
+
+    <nav class="p-8 flex justify-between items-center border-b border-neutral-800">
+    <div class="flex items-center gap-6">
+        <span class="text-[10px] uppercase text-neutral-500 tracking-[0.3em]">Visuals</span>
+        <h1 class="text-lg font-black uppercase tracking-tighter">PORTFOLIO</h1>
+    </div>
+    
+    </div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 py-12">
+        <div id="gallery-container" class="space-y-24">
+            <div id="loading" class="py-20 text-center text-xs uppercase tracking-widest opacity-50 animate-pulse">
+                Loading Pixels...
+            </div>
+        </div>
+    </main>
+
+    // add footer from footer.html
+
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    
+    <script>
+        /** @type {HTMLElement} container - The main div where sections are injected */
+        const container = document.getElementById('gallery-container');
+        
+        // Initialize lightbox logic
+        Fancybox.bind("[data-fancybox]", { Hash: false, Thumbs: { autoStart: false } });
+
+        /**
+         * INTERSECTION OBSERVER
+         * Handles the 'fade-in' effect and lazy loading for images as they scroll into view.
+         */
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.complete ? img.classList.remove('opacity-0') : img.onload = () => img.classList.remove('opacity-0');
+                    observer.unobserve(img);
+                }
+            });
+        }, { rootMargin: '50px' });
+
+        /**
+         * CORE GALLERY LOGIC
+         * Parses images.json and builds the UI based on filename conventions.
+         * Convention: AlbumID-SequenceID-StackID-Description.ext
+         */
+        fetch('images.json')
+            .then(res => res.json())
+            .then(albums => {
+                container.innerHTML = ''; 
+
+                Object.entries(albums).forEach(([folderName, photos]) => {
+                    /** @type {Object} stacks - Temporary storage for grouping carousels */
+                    const stacks = {};
+
+                    // Step 1: Grouping by Stack ID
+                    photos.forEach(file => {
+                        const parts = file.split('-');
+                        const stackID = parts[2] || 'none';
+                        const key = (stackID === 'none') ? `single-${file}` : `${folderName}-${stackID}`;
+                        if (!stacks[key]) stacks[key] = [];
+                        stacks[key].push(file);
+                    });
+
+                    // Step 2: Global Sorting (Sequence ID Descending)
+                    // Sort purely by the Sequence ID (the second part of the filename)
+                    const sortedStackKeys = Object.keys(stacks).sort((a, b) => {
+                        const getSeq = (str) => str.replace('single-', '').split('-')[1] || '0';
+                        return getSeq(b).localeCompare(getSeq(a));
+                    });
+
+                    // Title Formatting Logic
+                    const displayTitle = folderName.includes('_') 
+                        ? folderName.split('_').slice(1).join(' ').replace(/-/g, ' ') 
+                        : folderName.replace(/-/g, ' ').replace(/^\d+[\s-]/, '');
+
+                    let sectionHTML = `
+                        <section class="opacity-0 animate-fade-in mb-24">
+                            <h2 class="text-4xl font-black mb-8 uppercase tracking-tighter border-b-4 border-[#EDEBE9] inline-block">${displayTitle}</h2>
+                            <div class="flex flex-wrap -m-1">`;
+
+                    sortedStackKeys.forEach(key => {
+                        // Step 3: Local Sorting (Description A-Z)
+                        const group = stacks[key].sort((a, b) => a.localeCompare(b));
+                        
+                        // Step 4: Cover Selection (Look for -cover tag, fallback to A)
+                        const coverFile = group.find(f => f.toLowerCase().includes('-cover')) || group[0];
+                        const count = group.length;
+                        const coverPath = `dist/assets/gallery/${folderName}/${coverFile}`;
+
+                        // Generate image paths with proper extensions (WebP primary, JPG fallback)
+                        const coverBasename = coverFile.replace(/\.(heic|heif)$/i, '');
+                        const coverWebP = `dist/assets/gallery/${folderName}/${coverBasename}.webp`;
+                        const coverJpg = `dist/assets/gallery/${folderName}/${coverBasename}.jpg`;
+
+                        sectionHTML += `
+                            <div class="w-full sm:w-1/2 md:w-1/3 p-1">
+                                <div class="overflow-hidden aspect-square bg-[#262626] group relative">
+                                    <a href="${coverJpg}" data-fancybox="${key}" class="block">
+                                        <picture class="block">
+                                            <source srcset="${coverWebP}" type="image/webp">
+                                            <img src="${coverJpg}" loading="lazy" class="lazy-img block h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-80 opacity-0" alt="Gallery image">
+                                        </picture>
+                                        ${count > 1 ? `<div class="absolute top-3 right-3 bg-black/70 text-[#EDEBE9] text-[9px] px-2 py-1 rounded-sm tracking-[0.2em] font-bold">${count} PHOTOS</div>` : ''}
+                                    </a>
+                                    ${group.filter(f => f !== coverFile).map(file => {
+                                        const fileBasename = file.replace(/\.(heic|heif)$/i, '');
+                                        const fileJpg = `dist/assets/gallery/${folderName}/${fileBasename}.jpg`;
+                                        return `<a href="${fileJpg}" data-fancybox="${key}" class="hidden"></a>`;
+                                    }).join('')}
+                                </div>
+                            </div>`;
+                    });
+
+                    sectionHTML += `</div></section>`;
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = sectionHTML;
+                    container.appendChild(tempDiv.firstElementChild);
+                });
+
+                // Attach observers to newly created elements
+                document.querySelectorAll('.lazy-img').forEach(img => imageObserver.observe(img));
+            })
+            .catch(err => container.innerHTML = `<div class="text-red-500 text-xs">Runtime Error: ${err.message}</div>`);
+    </script>
+</body>
+</html>

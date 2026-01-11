@@ -5,11 +5,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const rootDir = path.join(__dirname, '..');
-const galleryDir = path.join(rootDir, 'dist', 'assets', 'gallery');
-const outputFile = path.join(rootDir, 'dist', 'images.json');
+const rootDir = //fixme
+const galleryDir = //fixme
+const outputFile = //fixme
 
-const albums = {};
+const //fixme = {};
 
 try {
     const folders = fs.readdirSync(galleryDir).filter(file => 
