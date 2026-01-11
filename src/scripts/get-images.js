@@ -5,13 +5,20 @@
 const fs = require('fs');
 const path = require('path');
 
-const rootDir = //fixme
-const galleryDir = //fixme
-const outputFile = //fixme
+const rootDir = path.join(__dirname, '..');
+const galleryDir = path.join(rootDir, 'content/gallery');
+const outputFile = path.join(rootDir, 'images.json');
 
-const //fixme = {};
+const albums = {};
 
 try {
+
+    // Ensure the gallery directory exists before reading
+    if (!fs.existsSync(galleryDir)) {
+        console.error(`Gallery directory not found: ${galleryDir}`);
+        process.exit(1);
+    }
+
     const folders = fs.readdirSync(galleryDir).filter(file => 
         fs.statSync(path.join(galleryDir, file)).isDirectory()
     );
