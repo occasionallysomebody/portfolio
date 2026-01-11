@@ -1,51 +1,30 @@
-const fs = require('fs-extra');
-const path = require('path');
+// ... (keep top of script same)
 
-(async function() {
-  const root = path.join(__dirname, '..');
-  const navPath = path.join(root, 'src', '_includes', 'nav.html');
   const targets = [
-    path.join(root, 'src', 'index.html'),
-    path.join(root, 'dist', 'about_me.html'),
-    path.join(root, 'dist', 'contact.html'),
-    path.join(root, 'dist', 'showerThoughts.html')
+    { src: 'src/index.html', dest: 'dist/index.html' },
+    { src: 'dist/about_me.html', dest: 'dist/about_me.html' },
+    { src: 'dist/contact.html', dest: 'dist/contact.html' },
+    { src: 'dist/showerThoughts.html', dest: 'dist/showerThoughts.html' }
   ];
 
-  if (!await fs.pathExists(navPath)) {
-    console.error('nav.html not found at', navPath);
-    process.exit(1);
-  }
+// ... (keep navPath check and navHtml read)
 
-  const navHtml = await fs.readFile(navPath, 'utf8');
+  for (const { src, dest } of targets) {
+    const srcPath = path.join(root, src);
+    const destPath = path.join(root, dest);
 
-  for (const t of targets) {
-    if (!await fs.pathExists(t)) {
-      console.warn('Skipping missing target:', t);
+    if (!await fs.pathExists(srcPath)) {
+      console.warn('Skipping missing source:', srcPath);
       continue;
     }
 
-    let content = await fs.readFile(t, 'utf8');
+    let content = await fs.readFile(srcPath, 'utf8');
 
-    // Replace placeholder <nav id="site-nav"></nav> optionally followed by the injector script
-    const placeholderRegex = /<nav[^>]*id=["']site-nav["'][^>]*>\s*<\/nav>\s*(?:<script[^>]*nav-inject\.js[^>]*>.*?<\/script>)?/is;
-    if (placeholderRegex.test(content)) {
-      content = content.replace(placeholderRegex, navHtml);
-    } else {
-      // fallback: replace first <nav>...</nav>
-      const firstNavRegex = /<nav[\s\S]*?<\/nav>/i;
-      if (firstNavRegex.test(content)) {
-        content = content.replace(firstNavRegex, navHtml);
-      } else {
-        console.warn('No <nav> found in', t);
-      }
-    }
+    // ... (keep regex replacement logic same)
 
-    // Remove any leftover nav-inject script tags
-    content = content.replace(/<script[^>]*nav-inject\.js[^>]*>\s*<\/script>/ig, '');
-
-    await fs.writeFile(t, content, 'utf8');
-    console.log('Updated nav in', t);
+    // IMPORTANT: Ensure the dist directory exists before writing
+    await fs.ensureDir(path.dirname(destPath)); 
+    await fs.writeFile(destPath, content, 'utf8');
+    console.log(`Updated nav: ${src} -> ${dest}`);
   }
-
-  console.log('\n✓ Nav include complete');
-})();
+// ...
