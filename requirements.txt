@@ -1,0 +1,3 @@
+# Python dependencies for HEIC conversion script
+pillow
+pillow-heif

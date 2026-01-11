@@ -15,17 +15,18 @@
 <body class="selection:bg-neutral-700">
 
     <nav class="p-8 flex justify-between items-center border-b border-neutral-800">
-        <div class="flex items-center gap-6">
-            <span class="text-[10px] uppercase text-neutral-500 tracking-[0.3em]">Visuals</span>
-            <h1 class="text-lg font-black uppercase tracking-tighter">PORTFOLIO</h1>
-        </div>
-        <div class="space-x-10 text-[10px] uppercase tracking-[0.2em] font-semibold">
-            <a href="../index.html" class="hover:text-white transition-colors duration-300">Gallery</a>
-            <a href="showerThoughts.html" class="hover:text-white transition-colors duration-300">Shower Thoughts</a>
-            <a href="about_me.html" class="hover:text-white transition-colors duration-300">About</a>
-            <a href="contact.html" class="hover:text-white transition-colors duration-300">Contact</a>
-        </div>
-    </nav>
+    <div class="flex items-center gap-6">
+        <span class="text-[10px] uppercase text-neutral-500 tracking-[0.3em]">Visuals</span>
+        <h1 class="text-lg font-black uppercase tracking-tighter">PORTFOLIO</h1>
+    </div>
+    <div class="space-x-10 text-[10px] uppercase tracking-[0.2em] font-semibold">
+        <a href="/index.html" class="hover:text-white transition-colors duration-300">Gallery</a>
+        <a href="/dist/about_me.html" class="hover:text-white transition-colors duration-300">About</a>
+        <a href="/dist/showerThoughts.html" class="hover:text-white transition-colors duration-300">Shower Thoughts</a>
+        <a href="/dist/contact.html" class="hover:text-white transition-colors duration-300">Contact</a>
+    </div>
+</nav>
+
 
     <main class="max-w-2xl mx-auto px-6 py-24 animate-fade-in">
         <h2 class="text-5xl font-black mb-16 uppercase tracking-tighter italic">Shower Thoughts.</h2>
@@ -40,10 +41,11 @@
     </main>
 
     <script>
-        fetch('../posts.json')
+        // Load articles from thoughts.json (root) and render into #shower-thoughts
+        fetch('../thoughts.json')
             .then(res => res.json())
             .then(posts => {
-                const container = document.getElementById('short-posts');
+                const container = document.getElementById('shower-thoughts');
                 posts.forEach(post => {
                     container.innerHTML += `
                         <article>
@@ -56,7 +58,8 @@
                             </ul>
                         </article>`;
                 });
-            });
+            })
+            .catch(err => console.error('Failed to load thoughts.json:', err));
     </script>
 </body>
 </html>

@@ -1,17 +1,12 @@
 /**
  * @file Generates a JSON manifest of gallery images for the portfolio.
- * Scans 'dist/assets/gallery', groups files by folder (album), 
- * and applies primary/secondary numeric sorting.
- * * @author occasionallysomebody
- * @version December 20, 2025
  */
 
 const fs = require('fs');
 const path = require('path');
 
-// Use process.cwd() to ensure we are in the root of the Vercel build environment
-const rootDir = process.cwd();
-const galleryDir = path.join(rootDir, 'dist/assets/gallery');
+const rootDir = path.join(__dirname, '..');
+const galleryDir = path.join(rootDir, 'dist', 'assets', 'gallery');
 const outputFile = path.join(rootDir, 'images.json');
 
 const albums = {};
@@ -29,7 +24,6 @@ try {
                 const aParts = a.split('-');
                 const bParts = b.split('-');
 
-                // Numeric Sort (Primary and Secondary IDs)
                 const aPrimary = parseInt(aParts[0], 10) || 0;
                 const aSecondary = parseInt(aParts[1], 10) || 0;
                 const bPrimary = parseInt(bParts[0], 10) || 0;
@@ -38,8 +32,6 @@ try {
                 if (aPrimary !== bPrimary) return bPrimary - aPrimary;
                 if (aSecondary !== bSecondary) return bSecondary - aSecondary;
 
-                // Fallback: If numbers are identical, sort alphabetically (A-Z)
-                // This ensures Stack IDs and Descriptions are ordered correctly.
                 return a.localeCompare(b);
             });
 

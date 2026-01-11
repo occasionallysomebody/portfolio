@@ -2,3 +2,7 @@ node_modules/
 .DS_Store
 images.json
 dist/output.css
+/.venv/
+/thoughts.json
+/dist/
+/.cache/

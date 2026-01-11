@@ -1,12 +1,43 @@
-[x] Create blog section
-Some way to sort through different albums
-[x] Update about_me section (honestly I don't even know if I want one haha)
-[x] Update contact section (the placement and image on the right is distracting)
-Create logo
-Maybe someway to show image tags or the file name
-Should I have a way to add captions? eh. nah. less is more.
-[x] "in medias res" tag line?
-Bookings? I'm not interested in scaling this right now
-Client work
+To-Do
 
-revise fonts (constrast ratio, sizing, etc)
+Design & UI
+
+    [ ] Logo: Circle with hemisphere (SVG)
+
+    [ ] Typography: Fix contrast ratios and sizing.
+
+    [ ] Album Sorting: Way to filter through different albums.
+
+    [ ] Metadata: Show image tags or filenames?
+
+    [ ] Lightmode dark mode toggle
+
+Technical / Fixes
+
+    [ ] HEIC Support: Can’t handle these files yet.
+
+    [ ] Carousel Fix: Ensure proper location/alignment.
+
+    [ ] Rotation Bug: Ensure water tower isn't rotated.
+
+    [ ] Client Work??: Add section
+
+On Hold
+
+    [ ] Bookings: Not interested in scaling right now.
+
+    [ ] Blog -- shower thoughts navigation inconsistency
+
+    [ ] File structure: make neater? idk industry practices
+
+Done
+
+    [x] Blog: Section created.
+
+    [x] About Me: Updated (kept it for now).
+
+    [x] Contact: Refined (fixed distracting image/placement).
+
+    [x] Tagline: "In medias res" implemented.
+
+    [x] Captions: Scrapped. Less is more.
