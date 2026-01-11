@@ -6,8 +6,7 @@
   "scripts": {
     "optimize": "node ./scripts/optimize.js",
     "manifest": "node ./scripts/get-images.js",
-    "styles": "tailwindcss -i ./src/input.css -o ./dist/output.css --minify",
-    "heic-convert": "python ./scripts/convert_heic.py",
+    "styles": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify",
     "include-nav": "node ./scripts/include-nav.js",
     "posts:build": "node ./scripts/md-to-json.js",
     "build": "pip install -r requirements.txt && npm run heic-convert && npm run posts:build && npm run include-nav && npm run optimize && npm run manifest && npm run styles"
