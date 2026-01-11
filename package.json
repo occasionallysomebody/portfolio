@@ -11,7 +11,7 @@
     "manifest": "node src/scripts/get-images.js",
     "styles": "tailwindcss -i ./src/styling/input.css -o ./dist/assets/output.css --minify",
     "build": "pip install -r pythonRequirements.txt && npm install @tailwindcss/cli gray-matter marked && npm run heic-convert && npm run posts:build && npm run include-SE && npm run optimize && npm run manifest && npm run styles"
-  },
+   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.18",
     "fs-extra": "^11.2.0",
