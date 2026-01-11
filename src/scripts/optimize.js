@@ -7,7 +7,8 @@ const sharp = require('sharp');
 const fs = require('fs-extra');
 const path = require('path');
 
-const root = path.join(__dirname, '..');
+// Current file: /src/scripts/optimize.js
+const root = path.join(__dirname, '..','..');
 // Source images folder
 const galleryDir = path.join(root, 'content/gallery'); 
 // Output build folder

@@ -5,8 +5,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const rootDir = path.join(__dirname, '..');
-const galleryDir = path.join(rootDir, 'content/gallery');
+const rootDir = path.join(__dirname, '..', '..');
+const galleryDir = path.join(rootDir, 'dist/assets/gallery');
 const outputFile = path.join(rootDir, 'images.json');
 
 const albums = {};
