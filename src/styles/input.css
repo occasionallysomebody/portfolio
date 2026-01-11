@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "../gallery.html";
+@source "../index.html";
 
 @tailwind base;
 @tailwind components;

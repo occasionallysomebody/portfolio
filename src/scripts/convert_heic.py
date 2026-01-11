@@ -3,7 +3,7 @@
 Directions:
 Convert HEIC/HEIF files to JPEG using pillow-heif + Pillow.
 Usage:
-  python scripts/convert_heic.py                # create converted copy of all files under gallery
+  python scripts/convert_heic.py                # create converted copy of all files under index
   python scripts/convert_heic.py                # write those files to a dist folder that contains only the optimized, production ready images, retaining the order and folder structure
                                                 # original uncompressed images should not be sent to server to begin with
 
@@ -24,7 +24,7 @@ register_heif_opener()
 
 def convert_heic_to_jpg(source_root, dist_root):
     """
-    Traverses the source gallery, converts HEIC files to JPEG, 
+    Traverses the source index, converts HEIC files to JPEG, 
     and saves them to the dist folder while maintaining structure.
     """
     source_path = Path(source_root)
@@ -65,8 +65,8 @@ def convert_heic_to_jpg(source_root, dist_root):
 
 if __name__ == "__main__":
     # Alignment with your project structure
-    SOURCE_GALLERY = "content/gallery"
-    DIST_GALLERY = "dist/assets/gallery"
+    SOURCE_GALLERY = "content/index"
+    DIST_GALLERY = "dist/assets/index"
     
     convert_heic_to_jpg(SOURCE_GALLERY, DIST_GALLERY)
-    print("\nConversion complete. Production-ready JPEGs are in dist/assets/gallery/.")
+    print("\nConversion complete. Production-ready JPEGs are in dist/assets/index/.")

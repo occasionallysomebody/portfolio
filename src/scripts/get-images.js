@@ -1,30 +1,30 @@
 /**
- * @file Generates a JSON manifest of gallery images for the portfolio.
+ * @file Generates a JSON manifest of index images for the portfolio.
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const rootDir = path.join(__dirname, '..', '..');
-const galleryDir = path.join(rootDir, 'dist/assets/gallery');
-const outputFile = path.join(rootDir, 'images.json');
+const indexDir = path.join(rootDir, 'dist/assets/index');
+const outputFile = path.join(rootDir, 'dist/images.json');
 
 const albums = {};
 
 try {
 
-    // Ensure the gallery directory exists before reading
-    if (!fs.existsSync(galleryDir)) {
-        console.error(`Gallery directory not found: ${galleryDir}`);
+    // Ensure the index directory exists before reading
+    if (!fs.existsSync(indexDir)) {
+        console.error(`Gallery directory not found: ${indexDir}`);
         process.exit(1);
     }
 
-    const folders = fs.readdirSync(galleryDir).filter(file => 
-        fs.statSync(path.join(galleryDir, file)).isDirectory()
+    const folders = fs.readdirSync(indexDir).filter(file => 
+        fs.statSync(path.join(indexDir, file)).isDirectory()
     );
 
     folders.forEach(album => {
-        const albumPath = path.join(galleryDir, album);
+        const albumPath = path.join(indexDir, album);
         const photos = fs.readdirSync(albumPath)
             .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file))
             .sort((a, b) => {

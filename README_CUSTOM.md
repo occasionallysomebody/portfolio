@@ -10,7 +10,7 @@ This system uses the filename to categorize, sort, and group images without a da
 ### 1. Naming Components
 
 * **Album ID (`02home`)**
-* Links the file to a specific gallery folder.
+* Links the file to a specific index folder.
 
 
 * **Sequence ID (`0001`)**
@@ -72,12 +72,12 @@ By default, the grid shows the first file in the A-Z sequence (usually the `-A` 
 src/                     # Source files (HTML templates, styles)
   _includes/
     nav.html            # Reusable navigation component (injected at build time)
-  index.html            # Main gallery page
+  index.html            # Main index page
   input.css             # Tailwind input (builds to dist/output.css)
 
 scripts/                 # Build automation and conversion tools
   optimize.js           # Sharp-based image optimizer (WebP + JPEG)
-  get-images.js         # Generates images.json manifest from dist/assets/gallery
+  get-images.js         # Generates images.json manifest from dist/assets/index
   include-nav.js        # Injects nav.html into HTML pages at build time
   md-to-json.js         # Converts markdown posts to thoughts.json
   convert_heic.py       # Python HEIC/HEIF to JPEG converter (via pillow-heif)
@@ -87,13 +87,13 @@ posts/                   # Markdown source files for blog/shower thoughts
   *.md                  # Write posts in markdown; build step generates thoughts.json
 
 dist/                   # Generated site output (build artifacts)
-  index.html            # Built gallery page (output)
+  index.html            # Built index page (output)
   output.css            # Built Tailwind CSS
   about_me.html
   contact.html
   showerThoughts.html
   assets/
-    gallery/            # Optimized images (WebP + JPEG fallback)
+    index/            # Optimized images (WebP + JPEG fallback)
 
 archive/old-root/       # Archived original files from root (for reference)
 
@@ -120,5 +120,5 @@ npm run build              # Full build (runs all steps)
 - **Source**: Edit files in `src/` and `posts/`
 - **Build**: Run `npm run build` or `npm run <script>` for individual steps
 - **Output**: Check `dist/` for the final site
-- **Images**: Place HEIC files in `dist/assets/gallery/`, then run `npm run heic-convert` to convert to JPEG
+- **Images**: Place HEIC files in `dist/assets/index/`, then run `npm run heic-convert` to convert to JPEG
 - **Blog**: Write Markdown in `posts/`, run `npm run posts:build` to generate `thoughts.json`

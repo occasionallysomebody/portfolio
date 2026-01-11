@@ -28,7 +28,7 @@
     </div>
 </nav>
 <main class="max-w-7xl mx-auto px-6 py-12">
-        <div id="gallery-container" class="space-y-24">
+        <div id="index-container" class="space-y-24">
             <div id="loading" class="py-20 text-center text-xs uppercase tracking-widest opacity-50 animate-pulse">
                 Loading Pixels...
             </div>
@@ -48,7 +48,7 @@
     
     <script>
         /** @type {HTMLElement} container - The main div where sections are injected */
-        const container = document.getElementById('gallery-container');
+        const container = document.getElementById('index-container');
         
         // Initialize lightbox logic
         Fancybox.bind("[data-fancybox]", { Hash: false, Thumbs: { autoStart: false } });
@@ -114,12 +114,12 @@
                         // Step 4: Cover Selection (Look for -cover tag, fallback to A)
                         const coverFile = group.find(f => f.toLowerCase().includes('-cover')) || group[0];
                         const count = group.length;
-                        const coverPath = `dist/assets/gallery/${folderName}/${coverFile}`;
+                        const coverPath = `dist/assets/index/${folderName}/${coverFile}`;
 
                         // Generate image paths with proper extensions (WebP primary, JPG fallback)
                         const coverBasename = coverFile.replace(/\.(heic|heif)$/i, '');
-                        const coverWebP = `dist/assets/gallery/${folderName}/${coverBasename}.webp`;
-                        const coverJpg = `dist/assets/gallery/${folderName}/${coverBasename}.jpg`;
+                        const coverWebP = `dist/assets/index/${folderName}/${coverBasename}.webp`;
+                        const coverJpg = `dist/assets/index/${folderName}/${coverBasename}.jpg`;
 
                         sectionHTML += `
                             <div class="w-full sm:w-1/2 md:w-1/3 p-1">
@@ -133,7 +133,7 @@
                                     </a>
                                     ${group.filter(f => f !== coverFile).map(file => {
                                         const fileBasename = file.replace(/\.(heic|heif)$/i, '');
-                                        const fileJpg = `dist/assets/gallery/${folderName}/${fileBasename}.jpg`;
+                                        const fileJpg = `dist/assets/index/${folderName}/${fileBasename}.jpg`;
                                         return `<a href="${fileJpg}" data-fancybox="${key}" class="hidden"></a>`;
                                     }).join('')}
                                 </div>

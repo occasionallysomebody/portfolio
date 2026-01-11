@@ -4,8 +4,8 @@ const path = require('path');
 const matter = require('gray-matter');
 
 // Define paths based on your actual file tree
-const postsDir = path.join(__dirname, '../content/posts');
-const outputFile = path.join(__dirname, '../thoughts.json');
+const postsDir = path.join(__dirname, '../content/posts/*.md');
+const outputFile = path.join(__dirname, '..dist/thoughts.json');
 
 function buildThoughts() {
     if (!fs.existsSync(postsDir)) {

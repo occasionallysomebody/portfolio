@@ -1,5 +1,5 @@
 /**
- * @file Optimizes gallery images for web performance.
+ * @file Optimizes index images for web performance.
  * Converts HEIC to WebP/JPEG and resizes to max 1920px width.
  */
 
@@ -10,9 +10,9 @@ const path = require('path');
 // Current file: /src/scripts/optimize.js
 const root = path.join(__dirname, '..','..');
 // Source images folder
-const galleryDir = path.join(root, 'content/gallery'); 
+const indexDir = path.join(root, 'content/index'); 
 // Output build folder
-const distGalleryDir = path.join(root, 'dist/assets/gallery');
+const distGalleryDir = path.join(root, 'dist/assets/index');
 
 // TEST_ONLY can be defined during debugging; default to empty to run all
 const TEST_ONLY = [];
@@ -46,15 +46,15 @@ function filterFilesForTest(album, files) {
 }
 
 async function optimize() {
-    if (!await fs.pathExists(galleryDir)) {
-        console.error(`Source directory not found: ${galleryDir}`);
+    if (!await fs.pathExists(indexDir)) {
+        console.error(`Source directory not found: ${indexDir}`);
         return;
     }
 
-    const albums = await fs.readdir(galleryDir);
+    const albums = await fs.readdir(indexDir);
 
     for (const album of albums) {
-        const sourceAlbumPath = path.join(galleryDir, album);
+        const sourceAlbumPath = path.join(indexDir, album);
         const distAlbumPath = path.join(distGalleryDir, album);
         
         if (!(await fs.stat(sourceAlbumPath)).isDirectory()) continue;
