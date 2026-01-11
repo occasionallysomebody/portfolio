@@ -10,7 +10,9 @@
     "heic-convert": "python ./scripts/convert_heic.py",
     "include-nav": "node ./scripts/include-nav.js",
     "posts:build": "node ./scripts/md-to-json.js",
-    "build": "npm run heic-convert && npm run posts:build && npm run include-nav && npm run optimize && npm run manifest && npm run styles"
+    "copy-index": "cp src/index.html dist/index.html",
+    "build": "npm run heic-convert && npm run posts:build && npm run include-nav && npm run copy-index && npm run optimize && npm run manifest && npm run styles",
+    "postinstall": "pip install -r requirements.txt"
   },
   "dependencies": {
     "fs-extra": "^11.2.0",
