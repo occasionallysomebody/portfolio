@@ -1,7 +1,0 @@
-{
-  "buildCommand": "node ./scripts/get-images.js && npx @tailwindcss/cli -i ./src/input.css -o ./dist/output.css --minify",
-  "outputDirectory": "dist",
-  "env": {
-    "NODE_ENV": "production"
-  }
-}
