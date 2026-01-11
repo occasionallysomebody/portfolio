@@ -2,21 +2,18 @@
 const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
-const { marked } = require('marked');
 
-// Define paths based on your structure
-const postsDir = path.join(__dirname, '../content/posts');
+// Define paths based on your actual file tree
+const postsDir = path.join(__dirname, '../posts');
 const outputFile = path.join(__dirname, '../thoughts.json');
 
-/**
- * Converts Markdown files to a JSON manifest
- */
 function buildThoughts() {
     if (!fs.existsSync(postsDir)) {
         console.error(`Posts directory not found: ${postsDir}`);
         return;
     }
 
+    // Filter for markdown files
     const files = fs.readdirSync(postsDir).filter(file => file.endsWith('.md'));
     
     const posts = files.map(file => {
@@ -26,8 +23,7 @@ function buildThoughts() {
         // Extract front-matter (title, date) and content
         const { data, content } = matter(fileContent);
         
-        // Split content by newlines and filter out empty strings 
-        // to match your <li> structure in showerThoughts.html
+        // Split content by newlines for the list format in showerThoughts.html
         const paragraphs = content
             .split('\n')
             .map(p => p.trim())
@@ -48,9 +44,8 @@ function buildThoughts() {
     // Sort posts by date descending
     posts.sort((a, b) => b.timestamp - a.timestamp);
 
-    // Write to root thoughts.json
     fs.writeFileSync(outputFile, JSON.stringify(posts, null, 2));
-    console.log(`✓ Successfully converted ${posts.length} posts to thoughts.json`);
+    console.log(`✓ Converted ${posts.length} posts to thoughts.json`);
 }
 
 buildThoughts();

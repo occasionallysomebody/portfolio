@@ -10,10 +10,11 @@
     "styles": "npx tailwindcss -i ./styling/input.css -o ./styling/output.css --minify",
     "include-nav": "node scripts/include-nav.js",
     "posts:build": "node scripts/md-to-json.js",
-    "build": "pip install -r pythonRequirements.txt && && npm install gray-matter marked && npm run posts:build && npm run include-nav && npm run optimize && npm run manifest && npm run styles"
+    "build": "pip install -r pythonRequirements.txt && npm install gray-matter marked && npm run posts:build && npm run include-nav && npm run optimize && npm run manifest && npm run styles"
   },
   "dependencies": {
     "fs-extra": "^11.2.0",
+    "marked": "^17.0.1",
     "sharp": "^0.33.2",
     "tailwindcss": "^4.0.0"
   },
